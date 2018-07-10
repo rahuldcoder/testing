@@ -91,6 +91,9 @@ def scrape(url, lang='ALL'):
 def parse(session, url):
     '''Get number of reviews and start getting subpages with reviews'''
 
+ 
+
+
     print('[parse] url:', url)
 
     soup = get_soup(session, url)
@@ -98,6 +101,26 @@ def parse(session, url):
     if not soup:
         print('[parse] no soup:', url)
         return
+
+
+    # Getting Traveller Ratings under category Excellent,Very Good,Average ,Poor, Terrible
+
+    traveller_rating_dict = dict()
+
+    count = soup.findAll('span',class_="is-shown-at-tablet")
+
+    traveller_rating_dict['Excellent'] = count[1].text
+    traveller_rating_dict['Very good'] = count[3].text
+    traveller_rating_dict['Average'] = count[5].text
+    traveller_rating_dict['Poor'] = count[7].text
+    traveller_rating_dict['Terrible'] = count[9].text
+
+    print('Dictionary Printing')
+
+    print('---------------------------')
+    print(traveller_rating_dict)
+    print('---------------------------')
+    
 
     # get number of reviews in all languages
     num_reviews = soup.find('span', class_='reviews_header_count').text # get text
@@ -115,7 +138,10 @@ def parse(session, url):
     # create template url to subpages with reviews
     # ie. https://www.tripadvisor.com/Hotel_Review-g562819-d289642-or{}.html
     url_template = url.replace('.html', '-or{}.html')
-    print('[parse] url_template:', url_template)
+   # print('[parse] url_template:', url_template)
+
+
+
 
     # get subpages and parse reviews.
     # every subpage has 5 reviews
@@ -220,6 +246,7 @@ def parse_reviews(session, url):
         # it has to check if `user_loc` exists on page
         #user_loc = review.find_all('div[@class="userLoc"]/strong/text()')
         user_loc = review.select_one('div.userLoc strong')
+        
         if user_loc:
             user_loc = user_loc.text
         else:
@@ -405,6 +432,4 @@ for url in start_urls:
         filename = url.split('Reviews-')[1][:-5] + '__' + lang
         print('filename:', filename)
         write_in_csv(items, filename + '.csv', headers, mode='w')
-        
-        # write in MySQL
-        #write_in_mysql(items, headers)
+       
