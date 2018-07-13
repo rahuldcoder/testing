@@ -103,6 +103,26 @@ def parse(session, url):
         return
 
 
+
+    print('Hello World')
+
+    # Get highlighted Amenity
+    amenity_list = soup.findAll('div',class_="highlightedAmenity")
+
+    print(amenity_list)
+
+    for amenity in amenity_list:
+        print(amenity.text )
+  
+    '''
+    highliamenity_list
+    
+    for dom_elements in highlighted_amenity_dom:
+        highlighted_amenity.append(dom_elements.text) 
+
+    print(highlighted_amenity)
+    '''
+
     # Getting Traveller Ratings under category Excellent,Very Good,Average ,Poor, Terrible
 
     traveller_rating_dict = dict()
