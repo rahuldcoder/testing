@@ -102,9 +102,23 @@ def parse(session, url):
         print('[parse] no soup:', url)
         return
 
+    #Scraping the about section page
 
+    hotel_amenities = soup.find_all('div',class_ ='hrAmenitiesSectionWrapper')
+    print(type(hotel_amenities))
+    
+    textItem=[]
 
-    print('Hello World')
+    for elements in hotel_amenities :
+        item = elements.find_all('div',class_='textitem')
+        textItem.append(item)
+
+    all_amenities = list()
+
+    for item in textItem[0]:
+        all_amenities.append(item.text)
+
+    print(all_amenities)
 
     # Get highlighted Amenity
     amenity_list = soup.findAll('div',class_="highlightedAmenity")
